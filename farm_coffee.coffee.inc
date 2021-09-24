@@ -51,5 +51,26 @@ function farm_coffee_coffee_commands() {
     }
   }
 
+  /** @var \Drupal\Core\Menu\LocalTaskManagerInterface $local_task_manager */
+  $local_task_manager = \Drupal::service('plugin.manager.menu.local_task');
+
+  /** @var \Drupal\Core\Access\AccessManagerInterface $access_manager */
+  $access_manager = \Drupal::service('access_manager');
+
+  // Add commands for each farm_settings page.
+  $settings_tree = $local_task_manager->getLocalTasksForRoute('farm_settings.settings_page');
+  foreach ($settings_tree as $instances) {
+    foreach ($instances as $child) {
+      $route_name = $child->getRouteName();
+      if ($access_manager->checkNamedRoute($route_name)) {
+        $commands[] = [
+          'value'   => Url::fromRoute($route_name)->toString(),
+          'label'   => $child->getTitle(),
+          'command' => ':settings' . ' ' . $child->getTitle(),
+        ];
+      }
+    }
+  }
+
   return $commands;
 }
