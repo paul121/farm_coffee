@@ -1,0 +1,7 @@
+name: Farm Coffee
+description: farmOS integration with drupal/coffee.
+type: module
+package: farmOS Contrib
+core_version_requirement: ^9
+dependencies:
+  - coffee:coffee
